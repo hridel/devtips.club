@@ -1,7 +1,13 @@
 import type { Metadata } from 'next';
 import localFont from 'next/font/local';
+import React from 'react';
+
+import Providers from '#/app/providers';
+import { auth } from '#/auth';
+import { Toaster } from '#/components/ui/toaster';
 
 import './globals.css';
+import './rich-text.css';
 
 const geistSans = localFont({
     src: './fonts/GeistVF.woff',
@@ -19,17 +25,21 @@ export const metadata: Metadata = {
     description: 'Speed up your development workflow with Dev Tips Club',
 };
 
-export default function RootLayout({
+export default async function RootLayout({
     children,
 }: Readonly<{
     children: React.ReactNode;
 }>) {
+    const session = await auth();
     return (
         <html lang="en">
             <body
                 className={`${geistSans.variable} ${geistMono.variable} antialiased`}
             >
-                {children}
+                <Providers session={session}>
+                    {children}
+                    <Toaster />
+                </Providers>
             </body>
         </html>
     );
