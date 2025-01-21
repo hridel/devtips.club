@@ -14,7 +14,7 @@ import {
     AlertDialogTitle,
     AlertDialogTrigger,
 } from '#/components/ui/alert-dialog';
-import { Button } from '#/components/ui/button';
+import { Button, buttonVariants } from '#/components/ui/button';
 import { deleteMyTip } from '#/lib/actions/tips';
 import { toast } from '#/lib/hooks/use-toast';
 
@@ -58,9 +58,15 @@ const DeleteButton = ({ tipId }: { tipId: string }) => {
                             <input type="hidden" name="id" value={tipId} />
                         </AlertDialogDescription>
                     </AlertDialogHeader>
-                    <AlertDialogFooter>
+                    <AlertDialogFooter className="mt-4">
                         <AlertDialogCancel>Cancel</AlertDialogCancel>
-                        <AlertDialogAction type="submit" disabled={pending}>
+                        <AlertDialogAction
+                            type="submit"
+                            disabled={pending}
+                            className={buttonVariants({
+                                variant: 'destructive',
+                            })}
+                        >
                             Delete
                         </AlertDialogAction>
                     </AlertDialogFooter>

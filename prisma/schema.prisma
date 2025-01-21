@@ -37,17 +37,18 @@ model Tag {
 }
 
 model Tip {
-  id           String    @id @default(cuid())
-  title        String    @db.VarChar(255)
-  htmlContent  String    @map("html_content")
-  lexicalState String    @map("lexical_state")
-  author       User      @relation(fields: [authorId], references: [id])
-  authorId     Int       @map("author_id")
+  id           String      @id @default(cuid())
+  title        String      @db.VarChar(255)
+  htmlContent  String      @map("html_content")
+  lexicalState String      @map("lexical_state")
+  author       User        @relation(fields: [authorId], references: [id])
+  authorId     Int         @map("author_id")
   tags         Tag[]
   ratings      Rating[]
-  createdAt    DateTime  @default(now()) @map("created_at")
-  updatedAt    DateTime  @updatedAt @map("updated_at")
-  deletedAt    DateTime? @map("deleted_at")
+  createdAt    DateTime    @default(now()) @map("created_at")
+  updatedAt    DateTime    @updatedAt @map("updated_at")
+  deletedAt    DateTime?   @map("deleted_at")
+  scoreboard   Scoreboard?
 
   @@map("tips")
 }
@@ -64,4 +65,17 @@ model Rating {
 
   @@id([userId, tipId])
   @@map("ratings")
+}
+
+model Scoreboard {
+  tipId        String   @unique @map("tip_id")
+  title        String
+  html_content String
+  created_at   DateTime
+  updated_at   DateTime
+  score        Float
+
+  tip Tip @relation(fields: [tipId], references: [id])
+
+  @@map("scoreboard")
 }

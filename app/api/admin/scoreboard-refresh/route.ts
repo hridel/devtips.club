@@ -19,11 +19,14 @@ export async function GET(request: Request) {
                 'Scoreboard refreshed successfully at ' +
                 new Date().toISOString(),
         });
-    } catch (error) {
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        // @ts-expect-error
+    } catch (error: unknown) {
         return NextResponse.json(
-            { message: 'Error refreshing scoreboard', error: error.message },
+            {
+                message: 'Error refreshing scoreboard',
+                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                // @ts-expect-error
+                error: error.message,
+            },
             { status: 500 }
         );
     }

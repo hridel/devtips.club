@@ -4,6 +4,7 @@ import React from 'react';
 
 import Providers from '#/app/providers';
 import { auth } from '#/auth';
+import PageHeader from '#/components/page-header';
 import { Toaster } from '#/components/ui/toaster';
 
 import './globals.css';
@@ -37,6 +38,7 @@ export default async function RootLayout({
                 className={`${geistSans.variable} ${geistMono.variable} antialiased`}
             >
                 <Providers session={session}>
+                    <PageHeader />
                     {children}
                     <Toaster />
                 </Providers>

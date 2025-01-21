@@ -1,12 +1,10 @@
 import { formatRelative } from 'date-fns';
-import { CalendarDays, ExternalLink } from 'lucide-react';
+import { CalendarDays, ExternalLink, Tags } from 'lucide-react';
 import Link from 'next/link';
 
 import { shortenText, stripHtmlTags } from '@hridel/text-utils';
-import { Tip } from '@prisma/client';
+import { Tag, Tip } from '@prisma/client';
 
-import DeleteButton from '#/components/my-tips-list/delete-button';
-import EditButton from '#/components/my-tips-list/edit-button';
 import {
     Card,
     CardContent,
@@ -17,11 +15,11 @@ import {
 
 import TipScore from '../tip-score';
 
-interface MyTipCardProps {
-    tip: Tip & { scoreboard: { score: number } };
+interface TipCardProps {
+    tip: Tip & { tags: Tag[]; scoreboard: { score: number | null } | null };
 }
 
-const MyTipCard = (props: MyTipCardProps) => {
+const TipCard = (props: TipCardProps) => {
     const { tip } = props;
     return (
         <Card>
@@ -39,9 +37,9 @@ const MyTipCard = (props: MyTipCardProps) => {
                 <TipScore
                     className="absolute -top-1 right-0"
                     tipId={tip.id}
-                    score={tip.scoreboard.score}
+                    score={tip.scoreboard?.score || 0}
                 />
-                <span className="text-sm flex items-center text-muted-foreground">
+                <span className="flex items-center text-muted-foreground">
                     <CalendarDays className="w-4 h-4 mr-2" />
                     {formatRelative(new Date(tip.createdAt), new Date())}
                 </span>
@@ -49,11 +47,19 @@ const MyTipCard = (props: MyTipCardProps) => {
             <CardContent>
                 <p>{shortenText(stripHtmlTags(tip.htmlContent), 200)}</p>
             </CardContent>
-            <CardFooter className="flex justify-between">
-                <DeleteButton tipId={tip.id} />
-                <EditButton tipId={tip.id} />
+            <CardFooter className="text-muted-foreground flex flex-wrap gap-2">
+                <Tags className="w-4 h-4 mr-2" />
+                {tip.tags.map((tag) => (
+                    <Link
+                        className="text-sm underline underline-offset-2 hover:no-underline"
+                        href={`/tags/${tag.slug}`}
+                        key={tag.id}
+                    >
+                        {tag.title}
+                    </Link>
+                ))}
             </CardFooter>
         </Card>
     );
 };
-export default MyTipCard;
+export default TipCard;

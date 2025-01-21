@@ -10,9 +10,9 @@ const TipsPage = async ({
 
     return (
         <div>
-            Tips list {page}
+            Top Rated Tips {page}
             <br />
-            <TipsList page={page} variant={tipsListVariants.latest} />
+            <TipsList page={page} variant={tipsListVariants.topRated} />
         </div>
     );
 };
